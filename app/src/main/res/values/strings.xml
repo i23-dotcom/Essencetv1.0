@@ -27,6 +27,9 @@
     <string name="browser_load_error">Couldn\'t load that page</string>
 
     <!-- Recording -->
+    <string name="skip_back_10">Skip back 10 seconds</string>
+    <string name="skip_forward_10">Skip forward 10 seconds</string>
+    <string name="play_pause">Play / pause</string>
     <string name="record">Record</string>
     <string name="stop_recording">Stop recording</string>
     <string name="recording_started">Recording started</string>

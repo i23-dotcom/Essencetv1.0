@@ -101,13 +101,95 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/bottomBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@drawable/bg_overlay_gradient_bottom"
-            android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:padding="16dp">
+
+            <!-- Seek controls: only shown when playing back a local recording (VOD), not live TV -->
+            <LinearLayout
+                android:id="@+id/seekControlsRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/skipBackButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="28dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/skip_back_10"
+                    android:src="@drawable/ic_replay_circle" />
+
+                <ImageButton
+                    android:id="@+id/playPauseButton"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_round_button"
+                    android:contentDescription="@string/play_pause"
+                    android:src="@drawable/ic_pause" />
+
+                <ImageButton
+                    android:id="@+id/skipForwardButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="28dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/skip_forward_10"
+                    android:scaleX="-1"
+                    android:src="@drawable/ic_replay_circle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/seekBarRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/positionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="44dp"
+                    android:text="00:00"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:progressTint="@color/record_active"
+                    android:thumbTint="@color/record_active" />
+
+                <TextView
+                    android:id="@+id/durationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="44dp"
+                    android:text="00:00"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/favoriteButton"
@@ -143,6 +225,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/picture_in_picture"
                 android:src="@drawable/ic_pip" />
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 

@@ -9,6 +9,7 @@ import android.os.Looper
 import android.util.Rational
 import android.view.KeyEvent
 import android.view.View
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import com.iptv.player.databinding.ActivityPlayerBinding
 import com.iptv.player.model.Channel
 import com.iptv.player.record.RecordingController
 import com.iptv.player.record.RecordingDataSourceFactory
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class PlayerActivity : AppCompatActivity() {
@@ -53,11 +55,26 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    // Seek bar (only relevant for local recordings, which are seekable VOD - live streams aren't)
+    private val seekUpdateHandler = Handler(Looper.getMainLooper())
+    private var isUserScrubbing = false
+    private val seekUpdateRunnable = object : Runnable {
+        override fun run() {
+            updateSeekUi()
+            seekUpdateHandler.postDelayed(this, 500L)
+        }
+    }
+
     companion object {
         const val EXTRA_CHANNEL_LIST = "extra_channel_list"
         const val EXTRA_START_INDEX = "extra_start_index"
         private const val OVERLAY_TIMEOUT_MS = 4000L
+        private const val SKIP_MS = 10_000L
     }
+
+    /** Recordings are played back from file:// URIs; everything else is a live stream. */
+    private fun isCurrentRecording(): Boolean =
+        channels.getOrNull(index)?.streamUrl?.startsWith("file://") == true
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +95,24 @@ class PlayerActivity : AppCompatActivity() {
         binding.nextButton.setOnClickListener { switchChannel(+1) }
         binding.prevButton.setOnClickListener { switchChannel(-1) }
         binding.pipButton.setOnClickListener { enterPipIfSupported() }
+
+        binding.skipBackButton.setOnClickListener { skip(-SKIP_MS) }
+        binding.skipForwardButton.setOnClickListener { skip(SKIP_MS) }
+        binding.playPauseButton.setOnClickListener { togglePlayPause() }
+        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) binding.positionLabel.text = formatMs(progress.toLong())
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                isUserScrubbing = true
+                binding.overlay.removeCallbacks(hideOverlayRunnable)
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                isUserScrubbing = false
+                player?.seekTo(seekBar.progress.toLong())
+                showOverlayThenHide()
+            }
+        })
 
         initPlayer()
         playCurrent()
@@ -141,7 +176,59 @@ class PlayerActivity : AppCompatActivity() {
             playWhenReady = true
         }
         updateEpgLabel(channel)
+        updateSeekControlsVisibility()
         showOverlayThenHide()
+    }
+
+    // --- Seek bar (recordings only) --------------------------------------------------------
+
+    private fun updateSeekControlsVisibility() {
+        val show = isCurrentRecording()
+        binding.seekControlsRow.visibility = if (show) View.VISIBLE else View.GONE
+        binding.seekBarRow.visibility = if (show) View.VISIBLE else View.GONE
+        // Live channel-switch chevrons only make sense when browsing live TV, not a single recording.
+        binding.prevButton.visibility = if (show) View.GONE else View.VISIBLE
+        binding.nextButton.visibility = if (show) View.GONE else View.VISIBLE
+        seekUpdateHandler.removeCallbacks(seekUpdateRunnable)
+        if (show) seekUpdateHandler.post(seekUpdateRunnable)
+    }
+
+    private fun updateSeekUi() {
+        val p = player ?: return
+        if (!isCurrentRecording()) return
+        val duration = p.duration.coerceAtLeast(0L)
+        binding.seekBar.max = duration.toInt().coerceAtLeast(1)
+        if (!isUserScrubbing) {
+            binding.seekBar.progress = p.currentPosition.toInt().coerceIn(0, binding.seekBar.max)
+            binding.positionLabel.text = formatMs(p.currentPosition)
+        }
+        binding.durationLabel.text = formatMs(duration)
+        binding.playPauseButton.setImageResource(
+            if (p.isPlaying) com.iptv.player.R.drawable.ic_pause else com.iptv.player.R.drawable.ic_play_arrow
+        )
+    }
+
+    private fun togglePlayPause() {
+        val p = player ?: return
+        p.playWhenReady = !p.playWhenReady
+        binding.playPauseButton.setImageResource(
+            if (p.playWhenReady) com.iptv.player.R.drawable.ic_pause else com.iptv.player.R.drawable.ic_play_arrow
+        )
+        showOverlayThenHide()
+    }
+
+    private fun skip(deltaMs: Long) {
+        val p = player ?: return
+        val target = (p.currentPosition + deltaMs).coerceIn(0L, p.duration.coerceAtLeast(0L))
+        p.seekTo(target)
+        showOverlayThenHide()
+    }
+
+    private fun formatMs(ms: Long): String {
+        val totalSeconds = ms / 1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
     }
 
     private fun updateEpgLabel(channel: Channel) {
@@ -263,6 +350,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onDestroy()
         stopRecordingIfActive(showToast = false)
         recordingTimerHandler.removeCallbacks(recordingTimerRunnable)
+        seekUpdateHandler.removeCallbacks(seekUpdateRunnable)
         player?.release()
         player = null
     }
