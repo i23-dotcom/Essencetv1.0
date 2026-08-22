@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#0B0E14</color>
+    <color name="surface">#161A24</color>
+    <color name="accent">#D4AF37</color>
+    <color name="accent_dark">#9C7C1F</color>
+    <color name="text_primary">#F5F7FA</color>
+    <color name="text_secondary">#9AA5B1</color>
+    <color name="chip_text">#F5F7FA</color>
+    <color name="chip_bg">#1E2330</color>
+    <color name="chip_bg_selected">#D4AF37</color>
+    <color name="record_active">#FF3B30</color>
+</resources>

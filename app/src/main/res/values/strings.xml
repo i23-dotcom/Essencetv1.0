@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Essence TV</string>
+    <string name="search_hint">Search channels…</string>
+    <string name="settings_title">Settings</string>
+    <string name="epg_title">TV Guide</string>
+    <string name="reload">Reload</string>
+    <string name="no_channels">No channels found</string>
+    <string name="no_epg_data">No programme data available yet</string>
+    <string name="playlist_url_label">Playlist URL (M3U / M3U8)</string>
+    <string name="playlist_url_hint">https://example.com/playlist.m3u</string>
+    <string name="or_label">— or —</string>
+    <string name="choose_local_file">Choose local .m3u file</string>
+    <string name="epg_url_label">EPG URL (XMLTV, optional)</string>
+    <string name="epg_url_hint">https://example.com/epg.xml</string>
+    <string name="save_and_load">Save &amp; Load</string>
+    <string name="favorite">Favorite</string>
+    <string name="aspect_ratio">Aspect ratio</string>
+    <string name="picture_in_picture">Picture in picture</string>
+    <string name="next_channel">Next channel</string>
+    <string name="prev_channel">Previous channel</string>
+    <string name="browser_title">Browser</string>
+    <string name="browser_back">Back</string>
+    <string name="browser_forward">Forward</string>
+    <string name="browser_url_hint">Search or type a URL</string>
+    <string name="browser_empty_hint">Enter a web address above to get started.</string>
+    <string name="browser_load_error">Couldn\'t load that page</string>
+
+    <!-- Recording -->
+    <string name="record">Record</string>
+    <string name="stop_recording">Stop recording</string>
+    <string name="recording_started">Recording started</string>
+    <string name="recording_saved">Saved recording: %1$s</string>
+    <string name="recordings_title">Recordings</string>
+    <string name="no_recordings">No recordings yet. Tap the record button while watching a channel.</string>
+    <string name="delete_recording_title">Delete this recording?</string>
+    <string name="delete">Delete</string>
+    <string name="recording_deleted">Recording deleted</string>
+
+    <!-- Settings: network / VPN -->
+    <string name="network_section_title">Network</string>
+    <string name="vpn_info_title">Using a VPN?</string>
+    <string name="vpn_info_body">Essence TV doesn\'t need its own VPN. Turn one on from your device\'s network settings (or any VPN app you already have installed) and Android automatically routes every app\'s traffic through it, including this one - no extra setup needed here.</string>
+
+    <!-- Settings: buffer / lag reduction -->
+    <string name="buffer_section_title">Streaming smoothness</string>
+    <string name="buffer_section_body">Essence TV pre-buffers a few seconds of each stream before playback starts, so brief network slow-downs don\'t cause stuttering. A longer buffer means smoother playback but a slower channel-change.</string>
+    <string name="buffer_low">Fastest\n(~5s)</string>
+    <string name="buffer_balanced">Balanced\n(~15s)</string>
+    <string name="buffer_smooth">Smoothest\n(~30s)</string>
+</resources>

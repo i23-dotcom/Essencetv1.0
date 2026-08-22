@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="#0B0E14"
+        android:pathData="M0,0h320v180h-320z" />
+    <!-- Bold "E" monogram -->
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M130,50 L146,50 L146,130 L130,130 Z
+                           M130,50 L210,50 L210,66 L130,66 Z
+                           M130,84 L192,84 L192,100 L130,100 Z
+                           M130,114 L210,114 L210,130 L130,130 Z" />
+    <!-- Wordmark underline accent -->
+    <path
+        android:fillColor="#F5F7FA"
+        android:pathData="M60,146h200v6L60,152z" />
+</vector>

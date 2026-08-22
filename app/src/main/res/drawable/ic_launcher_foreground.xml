@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Bold "E" monogram, built from four bars, kept inside the adaptive-icon safe zone -->
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M34,30 L46,30 L46,78 L34,78 Z
+                           M34,30 L80,30 L80,42 L34,42 Z
+                           M34,48 L72,48 L72,60 L34,60 Z
+                           M34,66 L80,66 L80,78 L34,78 Z" />
+</vector>
